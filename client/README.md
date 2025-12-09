@@ -1,16 +1,14 @@
-# React + Vite
+# FitTrack — Workout Tracker App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## 🎥 MVP Demo Video
+Watch the full demo here:  
+https://uncg-my.sharepoint.com/:v:/r/personal/jrhiggins_uncg_edu/Documents/Recordings/Meeting%20with%20Jalen%20Higgins-20251123_155318-Meeting%20Recording.mp4?csf=1&web=1&e=LqX1x1&nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJTdHJlYW1XZWJBcHAiLCJyZWZlcnJhbFZpZXciOiJTaGFyZURpYWxvZy1MaW5rIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXcifX0%3D
 
-Currently, two official plugins are available:
+## 📌 Overview
+FitTrack is a full-stack workout tracking application built with:
+- React (frontend)
+- Express.js (backend)
+- PostgreSQL (Neon database)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Users can log workouts, follow routines, view stats, edit exercises, and manage categories.
 
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
