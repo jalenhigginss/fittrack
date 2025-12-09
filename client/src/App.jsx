@@ -34,7 +34,7 @@ function App() {
     if (!user) return;
     try {
       setLoading(true);
-      const res = await authFetch("/workouts");
+      const res = await authFetch("/api/workouts");
       if (!res.ok) {
         if (res.status === 401) {
           setError("Unauthorized. Please log in again.");
@@ -66,7 +66,7 @@ function App() {
 
   const handleAddWorkout = async (newWorkout) => {
   try {
-    const res = await authFetch("/workouts", {
+    const res = await authFetch("/api/workouts", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(newWorkout),

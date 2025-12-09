@@ -3,7 +3,7 @@ const express = require("express");
 const cors = require("cors");
 require("dotenv").config();
 
-const pool = require("./db");
+const { pool, initDatabase } = require("./db");
 const authRoutes = require("./routes/auth");
 const workoutRoutes = require("./routes/workoutRoutes");
 const exerciseRoutes = require("./routes/exerciseRoutes");
@@ -143,7 +143,15 @@ app.post("/api/seed", async (req, res) => {
 // ===== END TEMP SEEDING BLOCK =====
 
 
-app.listen(PORT, () => {
-  console.log(`FitTrack API listening on port ${PORT}`);
-});
+(async () => {
+  try {
+    await initDatabase();
+    app.listen(PORT, () => {
+      console.log(`FitTrack API listening on port ${PORT}`);
+    });
+  } catch (err) {
+    console.error("Failed to start server due to DB error:", err);
+  }
+})();
+
 
