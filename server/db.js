@@ -6,19 +6,14 @@ const connectionString = process.env.DATABASE_URL;
 
 const pool = new Pool({
   connectionString,
-  // Use SSL for non-local DBs (Render, etc.)
-  ssl:
-    connectionString &&
-    !connectionString.includes("localhost") &&
-    !connectionString.includes("127.0.0.1")
-      ? { rejectUnauthorized: false }
-      : false,
+  ssl: connectionString && connectionString.includes("render.com")
+    ? { rejectUnauthorized: false }
+    : false,
 });
 
-// This runs on server startup – creates tables and seeds default data
+// This runs once on server startup – creates tables and seeds default data
 async function initDatabase() {
   try {
-    // Create tables if they don't exist
     await pool.query(`
       CREATE TABLE IF NOT EXISTS users (
         id SERIAL PRIMARY KEY,
@@ -51,7 +46,6 @@ async function initDatabase() {
       );
     `);
 
-    // Seed some default categories (global ones with user_id NULL)
     const defaultCategories = [
       "Chest",
       "Back",
@@ -74,13 +68,10 @@ async function initDatabase() {
     console.log("✅ Database initialized (tables + default categories)");
   } catch (err) {
     console.error("❌ Error initializing database:", err);
-    throw err; // important so server.js can decide what to do
   }
 }
 
-// ❌ REMOVE this (it’s in your current file):
-// initDatabase();
+initDatabase();
 
-// ✅ Instead, just export both:
-module.exports = { pool, initDatabase };
-
+// 🔴 IMPORTANT: export the Pool instance itself
+module.exports = pool;
