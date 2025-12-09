@@ -11,12 +11,14 @@ import StatsSummary from "./components/StatsSummary";
 import ProfilePanel from "./components/ProfilePanel";
 import WelcomeScreen from "./components/WelcomeScreen";
 import RoutinesTab from "./components/RoutinesTab";
+import MotivationBanner from "./components/MotivationBanner";
+
 import ExercisePickerModal from "./components/ExercisePickerModal";
 
 
 
 
-const API_BASE = "http://localhost:5000/api";
+
 
 function App() {
   const { user, authFetch, logout } = useContext(AuthContext);
@@ -32,7 +34,7 @@ function App() {
     if (!user) return;
     try {
       setLoading(true);
-      const res = await authFetch(`${API_BASE}/workouts`);
+      const res = await authFetch("/workouts");
       if (!res.ok) {
         if (res.status === 401) {
           setError("Unauthorized. Please log in again.");
@@ -63,25 +65,26 @@ function App() {
   }, [user]);
 
   const handleAddWorkout = async (newWorkout) => {
-    try {
-      const res = await authFetch(`${API_BASE}/workouts`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(newWorkout),
-      });
+  try {
+    const res = await authFetch("/workouts", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(newWorkout),
+    });
 
-      if (!res.ok) {
-        const text = await res.text();
-        throw new Error(`Server error ${res.status}: ${text}`);
-      }
-
-      const created = await res.json();
-      setWorkouts((prev) => [created, ...prev]);
-    } catch (err) {
-      console.error("Error adding workout:", err);
-      alert("Error adding workout: " + (err.message || err));
+    if (!res.ok) {
+      const text = await res.text();
+      throw new Error(`Server error ${res.status}: ${text}`);
     }
-  };
+
+    const created = await res.json();
+    setWorkouts((prev) => [created, ...prev]);
+  } catch (err) {
+    console.error("Error adding workout:", err);
+    alert("Error adding workout: " + (err.message || err));
+  }
+};
+
 
 return (
   <div className="app">
@@ -101,6 +104,7 @@ return (
     <div className="card">
       {activeTab === "log" && (
         <>
+        <MotivationBanner />
           <AddWorkoutForm onAdd={handleAddWorkout} />
           <RestTimer />  {/* timer lives on Log tab now */}
 

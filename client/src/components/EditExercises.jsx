@@ -1,7 +1,8 @@
 // client/src/components/EditExercises.jsx
 import React, { useEffect, useState } from "react";
 
-const API_BASE = "http://localhost:5000/api";
+const API_BASE =
+  import.meta.env.VITE_API_BASE_URL || "http://localhost:5000/api";
 
 export default function EditExercises({ onBack }) {
   const [categories, setCategories] = useState([]);
@@ -96,7 +97,9 @@ export default function EditExercises({ onBack }) {
 
       <ul style={{ marginTop: "1rem" }}>
         {exercises.length === 0 ? (
-          <li style={{ color: "#9ca3af" }}>No exercises in this category yet.</li>
+          <li style={{ color: "#9ca3af" }}>
+            No exercises in this category yet.
+          </li>
         ) : (
           exercises.map((ex) => <li key={ex.id}>{ex.name}</li>)
         )}

@@ -2,6 +2,9 @@
 import React, { useState } from "react";
 import axios from "axios";
 
+const API_BASE =
+  import.meta.env.VITE_API_BASE_URL || "http://localhost:5000/api";
+
 const routines = [
   {
     id: "full-body",
@@ -52,18 +55,16 @@ export default function RoutinesTab({ onCreated }) {
     try {
       const token = localStorage.getItem("token");
 
-      // ✅ Use LOCAL date, not UTC, so it doesn't shift a day
       const today = new Date();
       const year = today.getFullYear();
       const month = String(today.getMonth() + 1).padStart(2, "0");
       const day = String(today.getDate()).padStart(2, "0");
       const dateStr = `${year}-${month}-${day}`; // YYYY-MM-DD
 
-      // Create one workout entry per exercise
       await Promise.all(
         routine.exercises.map((ex) =>
           axios.post(
-            "http://localhost:5000/api/workouts",
+            `${API_BASE}/workouts`,
             {
               workoutName: routine.name,
               exercise: ex.exercise,
@@ -126,3 +127,4 @@ export default function RoutinesTab({ onCreated }) {
     </div>
   );
 }
+
