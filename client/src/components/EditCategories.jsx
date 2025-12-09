@@ -1,6 +1,7 @@
 // client/src/components/EditCategories.jsx
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+
+const API_BASE = import.meta.env.VITE_API_BASE_URL;
 
 export default function EditCategories({ onBack }) {
   const [categories, setCategories] = useState([]);
@@ -8,27 +9,43 @@ export default function EditCategories({ onBack }) {
 
   const token = localStorage.getItem("token");
 
-  const load = async () => {
-    const res = await axios.get("http://localhost:5000/api/exercise-categories", {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    setCategories(res.data);
+  const loadCategories = async () => {
+    try {
+      const res = await fetch(`${API_BASE}/exercise-categories`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (!res.ok) throw new Error("Failed to load categories");
+      const data = await res.json();
+      setCategories(data);
+    } catch (err) {
+      console.error("Error loading categories:", err);
+    }
   };
 
   useEffect(() => {
-    load();
-  }, []);
+    if (token) loadCategories();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [token]);
 
   const handleAdd = async (e) => {
     e.preventDefault();
     if (!newName.trim()) return;
-    await axios.post(
-      "http://localhost:5000/api/exercise-categories",
-      { name: newName },
-      { headers: { Authorization: `Bearer ${token}` } }
-    );
-    setNewName("");
-    load();
+
+    try {
+      const res = await fetch(`${API_BASE}/exercise-categories`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ name: newName }),
+      });
+      if (!res.ok) throw new Error("Failed to add category");
+      setNewName("");
+      loadCategories();
+    } catch (err) {
+      console.error("Error adding category:", err);
+    }
   };
 
   return (
@@ -38,9 +55,9 @@ export default function EditCategories({ onBack }) {
       </button>
       <h2>Edit Categories</h2>
 
-      <ul>
+      <ul style={{ marginTop: "1rem" }}>
         {categories.map((c) => (
-          <li key={c.id}>{c.name}</li> // MVP: view only
+          <li key={c.id}>{c.name}</li>
         ))}
       </ul>
 

@@ -1,8 +1,11 @@
-// routes/motivationRoutes.js
+// server/routes/motivationRoutes.js
 const express = require("express");
 const router = express.Router();
+
+const authMiddleware = require("../middleware/authMiddleware");
 const { getMotivation } = require("../controllers/motivationController");
 
-router.get("/motivation", getMotivation);
+// GET /api/motivation
+router.get("/motivation", authMiddleware, getMotivation);
 
 module.exports = router;

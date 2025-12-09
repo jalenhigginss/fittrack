@@ -2,7 +2,7 @@
 import React, { useState, useContext } from "react";
 import { AuthContext } from "../AuthContext";
 
-const API_BASE =import.meta.env.VITE_API_BASE_URL || "http://localhost:5000/api";
+const API_BASE =import.meta.env.VITE_API_BASE_URL;
 
 export default function Register() {
   const { login } = useContext(AuthContext);

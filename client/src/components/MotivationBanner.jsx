@@ -1,5 +1,5 @@
 // client/src/components/MotivationBanner.jsx
-import React, { useEffect, useState, useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../AuthContext";
 
 export default function MotivationBanner() {
@@ -13,13 +13,16 @@ export default function MotivationBanner() {
     try {
       setLoading(true);
       setError("");
-      const res = await authFetch("http://localhost:5000/api/motivation");
+
+      //  use relative path – AuthContext will prepend API base
+      const res = await authFetch("/motivation");
       if (!res.ok) throw new Error("Failed to load motivation");
+
       const data = await res.json();
       setQuote(data.quote);
       setAuthor(data.author);
     } catch (err) {
-      console.error(err);
+      console.error("Error loading motivation:", err);
       setError("Could not load motivation right now.");
     } finally {
       setLoading(false);
@@ -32,21 +35,22 @@ export default function MotivationBanner() {
 
   return (
     <div className="motivation-banner">
-      {loading && <p>Loading motivation...</p>}
-      {error && <p style={{ color: "salmon" }}>{error}</p>}
-      {!loading && !error && quote && (
+      {error ? (
+        <p style={{ color: "salmon" }}>{error}</p>
+      ) : (
         <>
-          <p className="motivation-text">“{quote}”</p>
-          <p className="motivation-author">— {author}</p>
+          <p>{quote || (loading ? "Getting motivation..." : "")}</p>
+          {author && <p className="muted">— {author}</p>}
         </>
       )}
+
       <button
-        type="button"
         className="btn-secondary"
         onClick={loadQuote}
+        disabled={loading}
         style={{ marginTop: "0.5rem" }}
       >
-        New quote
+        {loading ? "Loading..." : "New quote"}
       </button>
     </div>
   );
